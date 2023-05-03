@@ -30,8 +30,38 @@ class Mail extends \Bitrix\Main\Engine\Controller
         
         $selfModule = new \X\Postman\Module();
         // тут должна быть допустимых событий
+
+        $arResponce = [
+                'result' => false,
+                'errors' => []
+            ];
         
-        
+        ////////////////////////////////// контроль капчи /////////////////////////////////////////////
+        //https://dev.1c-bitrix.ru/user_help/settings/settings/captcha.php
+        if ($selfModule->getOption('captcha') == 'Y') {
+
+            include_once($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/main/classes/general/captcha.php"); 
+            $cptcha = new \CCaptcha(); 
+
+
+            if(!strlen($dctFields["captcha_word"])>0){ 
+                $arResponce['errors'][] = ['text' => "Не введен защитный код"]; 
+            } elseif(!$cptcha->CheckCode($dctFields["captcha_word"],$dctFields["captcha_sid"])){ 
+                $arResponce['errors'][] = ['text' => "Не правильный защитны код"];
+            } 
+            if(count($arResponce['errors']) >0) {
+                return $arResponce;
+            }
+        }
+        ////////////////////////////////// контроль капчи /////////////////////////////////////////////
+
+        ////////////////////////////////// контроль скртытого поля /////////////////////////////////////////////
+        if ($selfModule->getOption('hidefield') && $dctFields[$selfModule->getOption('hidefield')]) {
+            $arResponce['result'] = true;
+            return $arResponce;
+        }
+        ////////////////////////////////// контроль скртытого поля /////////////////////////////////////////////
+
         \Bitrix\Main\Mail\Event::send(array(
                 'EVENT_NAME' => $EventName,
                 'LID' => SITE_ID,
@@ -64,8 +94,9 @@ class Mail extends \Bitrix\Main\Engine\Controller
                 }
             }
         }
-        
-        return ['result' => true];
+
+        $arResponce['result'] = true;
+        return $arResponce;
     }
 }
 

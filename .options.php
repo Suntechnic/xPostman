@@ -7,6 +7,15 @@ return [
                 'title' => Loc::getMessage('X_MODULE_OPTIONS_DEBUG'),
                 'value' => 'Y'
             ],
+        'captcha' => [
+                'title' => 'Проверять CAPTCHA',
+                'value' => 'Y',
+                'default' => 'N'
+            ],
+        'hidefield' => [
+                'title' => 'Скрытое поле',
+                'default' => 'COMMENT'
+            ],
 //		'option_text' => [
 //                'title' => 'Текстовое значение',
 //                'default' => 'Текст'
