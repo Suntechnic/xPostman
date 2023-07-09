@@ -31,7 +31,7 @@ class Mail extends \Bitrix\Main\Engine\Controller
         $selfModule = new \X\Postman\Module();
         // тут должна быть допустимых событий
 
-        $arResponce = [
+        $dctResponse = [
                 'result' => false,
                 'errors' => []
             ];
@@ -45,24 +45,24 @@ class Mail extends \Bitrix\Main\Engine\Controller
 
 
             if(!strlen($dctFields["captcha_word"])>0){ 
-                $arResponce['errors'][] = ['text' => "Не введен защитный код"]; 
+                $dctResponse['errors'][] = ['text' => "Не введен защитный код"]; 
             } elseif(!$cptcha->CheckCode($dctFields["captcha_word"],$dctFields["captcha_sid"])){ 
-                $arResponce['errors'][] = ['text' => "Не правильный защитны код"];
+                $dctResponse['errors'][] = ['text' => "Не правильный защитны код"];
             } 
-            if(count($arResponce['errors']) >0) {
-                return $arResponce;
+            if(count($dctResponse['errors']) >0) {
+                return $dctResponse;
             }
         }
         ////////////////////////////////// контроль капчи /////////////////////////////////////////////
 
         ////////////////////////////////// контроль скртытого поля /////////////////////////////////////////////
         if ($selfModule->getOption('hidefield') && $dctFields[$selfModule->getOption('hidefield')]) {
-            $arResponce['result'] = true;
-            return $arResponce;
+            $dctResponse['result'] = true;
+            return $dctResponse;
         }
         ////////////////////////////////// контроль скртытого поля /////////////////////////////////////////////
 
-        \Bitrix\Main\Mail\Event::send(array(
+        $dctResponse['result'] = \Bitrix\Main\Mail\Event::send(array(
                 'EVENT_NAME' => $EventName,
                 'LID' => SITE_ID,
                 'C_FIELDS' => $dctFields,
@@ -95,8 +95,15 @@ class Mail extends \Bitrix\Main\Engine\Controller
             }
         }
 
-        $arResponce['result'] = true;
-        return $arResponce;
+
+        if (defined('APPLICATION_ENV') && APPLICATION_ENV != 'production') {
+            $dctResponse['debug'] = [
+                    '$dctFields' => $dctFields,
+                    '$EventName' => $EventName
+                ];
+        }
+
+        return $dctResponse;
     }
 }
 
