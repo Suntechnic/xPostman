@@ -62,12 +62,15 @@ class Mail extends \Bitrix\Main\Engine\Controller
         }
         ////////////////////////////////// контроль скртытого поля /////////////////////////////////////////////
 
-        $dctResponse['result'] = \Bitrix\Main\Mail\Event::send(array(
+        
+        
+        \Bitrix\Main\Mail\Event::send(array(
                 'EVENT_NAME' => $EventName,
                 'LID' => SITE_ID,
                 'C_FIELDS' => $dctFields,
             ));
-
+        $dctResponse['result'] = true;
+        
         // фиксация в хайлойд блоке:
         if ($HlBlock) {
             \Bitrix\Main\Loader::includeModule('highloadblock');
