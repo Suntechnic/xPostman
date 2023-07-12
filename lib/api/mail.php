@@ -29,7 +29,7 @@ class Mail extends \Bitrix\Main\Engine\Controller
                     ]
             ];
         $selfModule = new \X\Postman\Module();
-        if ($selfModule->getOption('csrf') != 'Y') $arConfig['-prefilters'] = '\Bitrix\Main\Engine\ActionFilter\Csrf';
+        if ($selfModule->getOption('csrf') == 'Y') $arConfig['-prefilters'][] = '\Bitrix\Main\Engine\ActionFilter\Csrf';
         $this->setActionConfig('send', $arConfig);
 	}
     

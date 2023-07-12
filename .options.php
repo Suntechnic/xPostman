@@ -17,10 +17,9 @@ return [
                 'default' => 'COMMENT'
             ],
 		'csrf' => [
-               'title' => 'Отключить проверку csrf',
-               'default' => 'Текст',
+                'title' => 'Отключить проверку csrf',
                 'value' => 'Y',
-                'default' => 'Y'
+                'default' => 'N'
            ],
 //        'option_checkbox' => [
 //                'title' => 'Флажок',
