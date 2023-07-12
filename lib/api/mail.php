@@ -22,7 +22,15 @@ class Mail extends \Bitrix\Main\Engine\Controller
     protected function init()
 	{
         parent::init();
-        foreach ($this->actionsConfig as $name=>$arConfig) $this->setActionConfig($name, $arConfig);
+
+        $arConfig = [
+                '-prefilters' => [
+                        '\Bitrix\Main\Engine\ActionFilter\Authentication'
+                    ]
+            ];
+        $selfModule = new \X\Postman\Module();
+        if ($selfModule->getOption('csrf') != 'Y') $arConfig['-prefilters'] = '\Bitrix\Main\Engine\ActionFilter\Csrf';
+        $this->setActionConfig('send', $arConfig);
 	}
     
     public function sendAction (string $EventName, array $dctFields, string $HlBlock='')

@@ -16,10 +16,12 @@ return [
                 'title' => 'Скрытое поле',
                 'default' => 'COMMENT'
             ],
-//		'option_text' => [
-//                'title' => 'Текстовое значение',
-//                'default' => 'Текст'
-//            ],
+		'csrf' => [
+               'title' => 'Отключить проверку csrf',
+               'default' => 'Текст',
+                'value' => 'Y',
+                'default' => 'Y'
+           ],
 //        'option_checkbox' => [
 //                'title' => 'Флажок',
 //                'default' => '',
